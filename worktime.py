@@ -21,37 +21,43 @@ Options:
 
 """
 import datetime
+import os
 import sqlite3
 from datetime import timedelta as td
+from pathlib import Path
 
 from docopt import docopt
 from peewee import *
 
-conn = sqlite3.connect('timetracker.db')
+db_path = None
+with open('database.txt') as f:
+    db_path = os.path.expanduser(f.readline())
 
-db = SqliteDatabase('people.db')
+conn = sqlite3.connect(db_path)
 
-
-class TimeTracker(Model):
-    time = DateTimeField()
-
-    class Meta:
-        database = db
-
-
-class Person(Model):
-    name = CharField()
-    birthday = DateField()
-    is_relative = BooleanField()
-
-    class Meta:
-        database = db  # This model uses the "people.db" database.
-
-
-def create_db_person():
-    db.connect()
-    db.create_tables([Person, TimeTracker])
-    db.close()
+# db = SqliteDatabase('people.db')
+#
+#
+# class TimeTracker(Model):
+#     time = DateTimeField()
+#
+#     class Meta:
+#         database = db
+#
+#
+# class Person(Model):
+#     name = CharField()
+#     birthday = DateField()
+#     is_relative = BooleanField()
+#
+#     class Meta:
+#         database = db  # This model uses the "people.db" database.
+#
+#
+# def create_db_person():
+#     db.connect()
+#     db.create_tables([Person, TimeTracker])
+#     db.close()
 
 
 def hours_today():
